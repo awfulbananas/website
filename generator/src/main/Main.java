@@ -15,8 +15,8 @@ import HTML.*;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        Path siteFolder = FileSystems.getDefault().getPath("./../site");
-        Path siteOutputFolder = FileSystems.getDefault().getPath("./../siteBuild");
+        Path siteFolder = FileSystems.getDefault().getPath("./../../site");
+        Path siteOutputFolder = FileSystems.getDefault().getPath("./../../siteBuild");
         //if there's already a build output, replace it
         if(Files.exists(siteOutputFolder)) {
             delDirRecursive(siteOutputFolder.toFile());

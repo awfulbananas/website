@@ -27,7 +27,8 @@ jobs:
       - name: Build and run site generator
         id: build
         run: |
-            find generator/src | echo
+            chmod u+rx javaCompileAndRun.sh
+            javaCompileAndRun.sh
 
       - name: Upload static files as artifact
         id: deployment
