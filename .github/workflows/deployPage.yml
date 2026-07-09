@@ -27,11 +27,7 @@ jobs:
       - name: Build and run site generator
         id: build
         run: |
-            cd generator/src
-            find . | javac -d ./../build
-            cd ./../build
-            java Main
-            cd ./../..
+            find generator/src | echo
 
       - name: Upload static files as artifact
         id: deployment
