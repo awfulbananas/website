@@ -25,10 +25,12 @@ public class Main {
 
         File baseIndexFile = siteFolder.resolve("index.html").toFile();
 
+        System.out.println("loading index.html");
         InputStream indexIn = new FileInputStream(baseIndexFile);
         HTMLElement index = HTMLNode.parseHTML(indexIn);
         index.purgeWhitespaceText();
 
+        System.out.println("writing updated index.html");
         File outputIndexFile = siteOutputFolder.resolve("index.html").toFile();
         writeHTMLToFile(outputIndexFile, index);
 
