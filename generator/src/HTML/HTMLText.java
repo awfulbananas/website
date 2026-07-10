@@ -24,13 +24,13 @@ public class HTMLText extends HTMLNode {
     }
 
     @Override
-    public String toString() {
-        return text;
+    public HTMLNode copy() {
+        return new HTMLText(text);
     }
 
     @Override
-    public boolean isText() {
-        return true;
+    public String toString() {
+        return text;
     }
 
     @Override

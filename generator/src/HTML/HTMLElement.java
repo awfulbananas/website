@@ -7,7 +7,6 @@ public class HTMLElement extends HTMLNode {
     private String tagName;
     private TreeMap<String, String> attributes;
     private List<HTMLNode> children;
-    protected HTMLElement parent;
 
     public HTMLElement(String tagName, TreeMap<String, String> attributes) {
         this(tagName, attributes, new ArrayList<>());
@@ -21,11 +20,39 @@ public class HTMLElement extends HTMLNode {
         this.tagName = tagName;
         this.attributes = attributes;
         this.children = children;
+        for(HTMLNode c : children) {
+            c.parent = this;
+        }
+    }
+
+    public HTMLElement getChildElementByTag(String tag) {
+        for(HTMLNode c : children) {
+            if(c instanceof HTMLElement && ((HTMLElement)c).tagName.equals(tag)) {
+                return (HTMLElement) c;
+            }
+        }
+        return null;
+    }
+
+    public void add(HTMLNode newNode) {
+        children.add(newNode);
+    }
+
+    public void add(int index, HTMLNode newNode) {
+        children.add(index, newNode);
     }
 
     @Override
-    public boolean isElement() {
-        return true;
+    public HTMLNode copy() {
+        List<HTMLNode> childrenCopy = new ArrayList<>();
+        for(HTMLNode c : children) {
+            childrenCopy.add(c.copy());
+        }
+        TreeMap<String, String> attributesCopy = new TreeMap<>();
+        for(String key : attributes.navigableKeySet()) {
+            attributesCopy.put(key, attributes.get(key));
+        }
+        return new HTMLElement(tagName, attributesCopy, childrenCopy);
     }
 
     @Override
@@ -36,19 +63,19 @@ public class HTMLElement extends HTMLNode {
         }
         if(!children.isEmpty()) {
             out.print(">");
-            if(!children.getFirst().isText()) {
+            if(!(children.getFirst() instanceof HTMLText)) {
                 out.println();
             }
             for (HTMLNode child : children) {
                 child.printNode(out, depth + 1);
             }
-            if(!children.getLast().isText()) {
+            if(!(children.getLast() instanceof HTMLText)) {
                 out.print("  ".repeat(depth));
             }
         } else {
             out.print(">");
         }
-        if(HTMLNode.ONE_SIDED_TAGS.contains(tagName)) {
+        if(HTMLDocument.ONE_SIDED_TAGS.contains(tagName)) {
             out.println();
         } else {
             out.println("</" + tagName + ">");
@@ -59,7 +86,7 @@ public class HTMLElement extends HTMLNode {
         Iterator<HTMLNode> cItr = children.iterator();
         while(cItr.hasNext()) {
             HTMLNode child = cItr.next();
-            if(child.isElement()) {
+            if(child instanceof HTMLElement) {
                 ((HTMLElement)child).purgeWhitespaceText();
             } else if(((HTMLText)child).isEmpty()) {
                 cItr.remove();

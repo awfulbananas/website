@@ -13,17 +13,12 @@ public class HTMLComment extends HTMLText {
         out.println("  ".repeat(depth) + this);
     }
 
+    @Override
+    public HTMLNode copy() {
+        return new HTMLComment(text);
+    }
+
     public String toString() {
         return "<!--" + text + "-->";
-    }
-
-    @Override
-    public boolean isComment() {
-        return true;
-    }
-
-    @Override
-    public boolean isText() {
-        return false;
     }
 }
